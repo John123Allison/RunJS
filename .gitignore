@@ -65,3 +65,10 @@ yarn-debug.log*
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep
+
+node_modules
+__pycache__
+
+users.db
+runs.db
+*.pyc

@@ -1,7 +1,10 @@
-from flask import Flask, render_template, url_for, redirect, request, session, flash
+from flask import Flask, render_template, url_for, redirect, request, session, flash, g
 from functools import wraps
+import sqlite3
 
+# app object
 app = Flask(__name__)
+app.database = "users.db"
 
 app.secret_key = "Ku@&'Ug]c#RT6mrr-l!OP2PL%_ho,("
 
@@ -20,7 +23,11 @@ def login_required(f):
 @app.route('/')
 @login_required
 def main():
-    return render_template('main.html')
+    g.db = connect_db() # g is a temporary object
+    # TODO: get logged in user's run data here using foreign keys
+    g.db.close()
+
+    return render_template('main.html') # TODO: pass run data thru here
 
 # login 
 @app.route('/login', methods=['GET','POST'])
@@ -45,5 +52,10 @@ def logout():
     flash('Logged out.')
     return redirect(url_for('main'))
 
+# connect to database
+def connect_db():
+    return sqlite3.connect(app.database)
+
+# this runs when the program is started
 if __name__ == '__main__':
     app.run(debug=True)
