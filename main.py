@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, redirect, request, session, f
 from functools import wraps
 import sqlite3
 
-# app object
+# app objects
 app = Flask(__name__)
 app.database = "users.db"
 
@@ -23,7 +23,7 @@ def login_required(f):
 @app.route('/')
 @login_required
 def main():
-    g.db = connect_db() # g is a temporary object
+    g.db = connect_db()
     # TODO: get logged in user's run data here using foreign keys
     g.db.close()
 
@@ -35,6 +35,8 @@ def login():
     error = None
 
     if request.method == 'POST':
+        # TODO: change this so it queries the db using the g object for a username and pass
+        # make sure it's cleaned to be protected from SQL injects
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'Invalid credentials. Please try again.'
         else:
