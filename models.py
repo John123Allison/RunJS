@@ -1,9 +1,14 @@
-import sqlite3
+from main import db
 
-with sqlite3.connect("users.db") as connections:
-    cursor = connection.cursor()
-    cursor.execute("CREATE TABLE users(username TEXT NOT NULL PRIMARY KEY, password TEXT NOT NULL)")
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password = db.Column(db.String(128))
 
-with sqlite3.connect("runs.db") as connections:
-    cursor = connection.cursor()
-    cursor.execute("CREATE TABLE runs(username TEXT REFERENCES users(username), time TIME, distance INT")
+    def __repr__(self):
+        return '<User {} {}>'.format(self.username, self.email)
+
+class Run(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    # TODO: fill out rest of this 
