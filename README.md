@@ -1,2 +1,0 @@
-# RunJS
-Run tracking app
