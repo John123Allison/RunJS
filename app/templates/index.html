@@ -5,6 +5,24 @@
     <title>{{ title }} - RunJS</title>
 </head>
 <body>
-    <h1>Hello, {{ username }}</h1>
+    <!-- Login / Logout links -->
+    <div>
+        RunJS:
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
+    <!-- End login/logout links -->
+
+    {% block content %}
+            <h1>Hello, {{ current_user.username }}</h1>
+    {% endblock %}
+    
+    <!-- Display user data here -->
+        <!-- TODO: This -->
+    <!-- End display user data -->
 </body>
 </html>
