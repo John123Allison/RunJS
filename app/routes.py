@@ -1,15 +1,20 @@
 from app import app, db
 from flask import render_template, flash, redirect, request
-from app.forms import LoginForm, RegistrationForm
-from flask_login import current_user, login_user, login_required, logout_user
-from app.models import User
+from app.forms import LoginForm, RegistrationForm, RunForm
+from flask_login import current_user, login_user, login_required, logout_user, current_user
+from app.models import User, Run
 from werkzeug.urls import url_parse
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET','POST'])
+@app.route('/index', methods=['GET','POST'])
 @login_required
 def index():
-    return render_template('index.html', title="Home")
+    form = RunForm()
+    if form.validate_on_submit():
+        run = Run(distance_miles=form.distance_miles.data, time=form.time.data, user_id=current_user.id)
+        db.session.add(run)
+        db.session.commit()
+    return render_template('index.html', title="Home", form=form)
 
 @app.route('/login', methods=['GET','POST'])
 def login():

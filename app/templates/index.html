@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }} - RunJS</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 </head>
 <body>
     <!-- Login / Logout links -->
@@ -22,7 +24,45 @@
     {% endblock %}
     
     <!-- Display user data here -->
-        <!-- TODO: This -->
+    <!-- TODO: pass data thru jinja and use it to read into script !-->
+    <div class="ct-chart ct-perfect-fourth" id="chart">
+        <script>
+            var data = {
+              // A labels array that can contain any sort of values
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+              // Our series array that contains series objects or in this case series data arrays
+              series: [
+                [5, 2, 4, 2, 0]
+              ]
+            };
+
+            // Create a new line chart object where as first parameter we pass in a selector
+            // that is resolving to our chart container element. The Second parameter
+            // is the actual data object.
+            new Chartist.Line('.ct-chart', data);
+        </script>
+    </div>
     <!-- End display user data -->
+
+    <!-- Run Log Form -->
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.distance_miles.label }}<br>
+            {{ form.distance_miles(size=32) }}<br>
+            {% for error in form.distance_miles.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.time.label }}<br>
+            {{ form.time(size=64) }}<br>
+            {% for error in form.time.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <!-- End Run Log Form -->
 </body>
 </html>
