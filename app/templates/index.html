@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>{{ title }} - RunJS</title>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 </head>
 <body>
     <!-- Login / Logout links -->
-    <div>
+    <div class="container">
         RunJS:
         <a href="{{ url_for('index') }}">Home</a>
         {% if current_user.is_anonymous %}
@@ -16,17 +17,16 @@
         {% else %}
         <a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
+        {% block content %}
+                <h1>Hello, {{ current_user.username }}!</h1>
+        {% endblock %}
     </div>
     <!-- End login/logout links -->
-
-    {% block content %}
-            <h1>Hello, {{ current_user.username }}</h1>
-    {% endblock %}
     
     <!-- Display user data here -->
     <!-- TODO: pass data thru jinja and use it to read into script !-->
 
-    <div class="ct-chart ct-perfect-fourth" id="chart">
+    <div class="ct-chart ct-perfect-fourth container-sm" id="chart">
         <script>
             var data = {
               // A labels array that can contain any sort of values
@@ -41,33 +41,40 @@
               ]
             };
 
+            var options = {
+                scaleMinSpace: 20,
+                onlyInteger: true
+            };
+
             // Create a new line chart object where as first parameter we pass in a selector
             // that is resolving to our chart container element. The Second parameter
             // is the actual data object.
-            new Chartist.Line('.ct-chart', data);
+            new Chartist.Line('.ct-chart', data, options);
         </script>
     </div>
     <!-- End display user data -->
 
     <!-- Run Log Form -->
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.distance_miles.label }}<br>
-            {{ form.distance_miles(size=32) }}<br>
-            {% for error in form.distance_miles.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.time.label }}<br>
-            {{ form.time(size=64) }}<br>
-            {% for error in form.time.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+    <div class="container">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.distance_miles.label }}<br>
+                {{ form.distance_miles(size=32) }}<br>
+                {% for error in form.distance_miles.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.time.label }}<br>
+                {{ form.time(size=64) }}<br>
+                {% for error in form.time.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
     <!-- End Run Log Form -->
 </body>
 </html>
