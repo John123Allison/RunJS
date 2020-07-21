@@ -72,6 +72,13 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
+            <p>
+                {{ form.when.label }}<br>
+                {{ form.when(size=64) }}<br>
+                {% for error in form.when.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
             <p>{{ form.submit() }}</p>
         </form>
     </div>

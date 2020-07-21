@@ -4,3 +4,5 @@ flask-sqlalchemy
 flask-wtf
 flask-login
 email-validator
+psycopg2
+gunicorn

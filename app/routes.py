@@ -6,13 +6,18 @@ from flask import render_template, flash, redirect, request
 from flask_login import current_user, login_user, login_required, logout_user, current_user
 from werkzeug.urls import url_parse
 
+### HOME PAGE ###
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
 @login_required
 def index():
     form = RunForm()
     if form.validate_on_submit():
-        run = Run(distance_miles=form.distance_miles.data, time=form.time.data, user_id=current_user.id)
+        if form.when.data:
+            run = Run(distance_miles=form.distance_miles.data, time=form.time.data, \
+                user_id=current_user.id, timestamp=form.when.data)
+        else:
+            run = Run(distance_miles=form.distance_miles.data, time=form.time.data, user_id=current_user.id)
         db.session.add(run)
         db.session.commit()
 
@@ -20,6 +25,7 @@ def index():
 
     return render_template('index.html', title="Home", form=form, runs=curr_user_runs)
 
+### LOGIN ###
 @app.route('/login', methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
@@ -39,11 +45,13 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
+### LOGOUT ###
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect('/index')
 
+### REGISTRATION ###
 @app.route('/register', methods=['GET','POST'])
 def register():
     if current_user.is_authenticated:
