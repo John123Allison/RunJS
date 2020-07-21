@@ -1,8 +1,9 @@
 from app import app, db
-from flask import render_template, flash, redirect, request
 from app.forms import LoginForm, RegistrationForm, RunForm
-from flask_login import current_user, login_user, login_required, logout_user, current_user
 from app.models import User, Run
+
+from flask import render_template, flash, redirect, request
+from flask_login import current_user, login_user, login_required, logout_user, current_user
 from werkzeug.urls import url_parse
 
 @app.route('/', methods=['GET','POST'])
@@ -14,7 +15,10 @@ def index():
         run = Run(distance_miles=form.distance_miles.data, time=form.time.data, user_id=current_user.id)
         db.session.add(run)
         db.session.commit()
-    return render_template('index.html', title="Home", form=form)
+
+    curr_user_runs = db.session.query(Run).filter_by(user_id=current_user.id).all()
+
+    return render_template('index.html', title="Home", form=form, runs=curr_user_runs)
 
 @app.route('/login', methods=['GET','POST'])
 def login():

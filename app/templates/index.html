@@ -25,14 +25,19 @@
     
     <!-- Display user data here -->
     <!-- TODO: pass data thru jinja and use it to read into script !-->
+
     <div class="ct-chart ct-perfect-fourth" id="chart">
         <script>
             var data = {
               // A labels array that can contain any sort of values
-              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-              // Our series array that contains series objects or in this case series data arrays
+              labels: [{% for run in runs %}
+                "{{ run.timestamp }}",
+              {% endfor %}],
+              // Our series array that contains series objects or in this case series data array
               series: [
-                [5, 2, 4, 2, 0]
+                [{% for run in runs %}
+                    "{{ run.distance_miles }}",
+                {% endfor %}]
               ]
             };
 
