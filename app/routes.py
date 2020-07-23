@@ -14,14 +14,17 @@ def index():
     form = RunForm()
     if form.validate_on_submit():
         if form.when.data:
-            run = Run(distance_miles=form.distance_miles.data, time=form.time.data, \
-                user_id=current_user.id, timestamp=form.when.data)
+            run = Run(distance_miles=form.distance_miles.data, time=form.time.data,
+                      user_id=current_user.id, timestamp=form.when.data)
         else:
-            run = Run(distance_miles=form.distance_miles.data, time=form.time.data, user_id=current_user.id)
+            run = Run(distance_miles=form.distance_miles.data, time=form.time.data,
+                    user_id=current_user.id)
+                    
         db.session.add(run)
         db.session.commit()
 
     curr_user_runs = db.session.query(Run).filter_by(user_id=current_user.id).all()
+    curr_user_runs.sort()
 
     return render_template('index.html', title="Home", form=form, runs=curr_user_runs)
 
@@ -30,7 +33,7 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect('/index')
-    
+
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -66,5 +69,5 @@ def register():
 
         flash('Account created')
         return redirect('/login')
-    
+
     return render_template('register.html', title='Register', form=form)

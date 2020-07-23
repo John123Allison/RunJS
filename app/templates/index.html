@@ -13,47 +13,70 @@
         RunJS:
         <a href="{{ url_for('index') }}">Home</a>
         {% if current_user.is_anonymous %}
-        <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('login') }}">Login</a>
         {% else %}
-        <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
         {% block content %}
-                <h1>Hello, {{ current_user.username }}!</h1>
+            <h1>Hello, {{ current_user.username }}!</h1>
         {% endblock %}
     </div>
     <!-- End login/logout links -->
     
     <!-- Display user data here -->
-    <!-- TODO: pass data thru jinja and use it to read into script !-->
-
-    <div class="ct-chart ct-perfect-fourth container-sm" id="chart">
+    <div class="ct-chart ct-square container-sm h-25" id="chart">
         <script>
             var data = {
               // A labels array that can contain any sort of values
-              labels: [{% for run in runs %}
-                "{{ run.timestamp }}",
-              {% endfor %}],
+                labels: [
+                {% if runs is defined %}
+                    {% for run in runs %}
+                        "{{ run.timestamp }}",
+                    {% endfor %}
+                {% else %}
+                    "No data"
+                {% endif %}],
               // Our series array that contains series objects or in this case series data array
               series: [
-                [{% for run in runs %}
-                    "{{ run.distance_miles }}",
-                {% endfor %}]
+                [{% if runs is defined %}
+                    {% for run in runs %}
+                        "{{ run.distance_miles }}",
+                    {% endfor %}
+                {% endif %}]
               ]
             };
 
             var options = {
                 scaleMinSpace: 20,
-                onlyInteger: true
+                onlyInteger: true,
             };
+            var responsiveOptions = [
+                ['screen and (min-width: 641px) and (max-width: 1024px)', {
+                    seriesBarDistance: 10,
+                    axisX: {
+                    labelInterpolationFnc: function (value) {
+                        return value;
+                    }
+                    }
+                }],
+                ['screen and (max-width: 640px)', {
+                    seriesBarDistance: 5,
+                    axisX: {
+                    labelInterpolationFnc: function (value) {
+                        return value[0];
+                    }
+                    }
+                }]
+                ];
 
             // Create a new line chart object where as first parameter we pass in a selector
             // that is resolving to our chart container element. The Second parameter
             // is the actual data object.
-            new Chartist.Line('.ct-chart', data, options);
+            new Chartist.Line('.ct-chart', data, options, responsiveOptions); 
         </script>
     </div>
     <!-- End display user data -->
-
+    
     <!-- Run Log Form -->
     <div class="container">
         <form action="" method="post">

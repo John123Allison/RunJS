@@ -30,6 +30,10 @@ class Run(db.Model):
     def __repr__(self):
         return '<Run {}>'.format(self.timestamp)
 
+    # defines comparision of two runs - used to sort runs my date logged
+    def __lt__(self, other):
+        return self.timestamp < other.timestamp
+
 # load user id from database for flask-login to use
 @login.user_loader
 def load_user(id):

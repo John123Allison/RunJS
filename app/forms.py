@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DecimalField, TimeField, DateField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DecimalField, TimeField, DateTimeField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
 
@@ -30,6 +30,6 @@ class RegistrationForm(FlaskForm):
 
 class RunForm(FlaskForm):
     distance_miles =  DecimalField('Distance (Miles)', validators=[DataRequired()])
-    time = TimeField('Time (H:M:S)', format='%H:%M:%S', validators=[DataRequired()]) 
-    when = DateField('When (Y-M-D)') 
+    time = TimeField('Time [H:M:S]', format='%H:%M:%S', validators=[DataRequired()]) 
+    when = DateTimeField('When [Y-M-D H:M:S] (Leave blank for now)') 
     submit = SubmitField('Log Run')
