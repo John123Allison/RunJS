@@ -2,8 +2,8 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
-    # use either local env variable or a set one if that is not available
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    # use env variable - export SECRET_KEY=<key>
+    SECRET_KEY = os.environ.get('SECRET_KEY') 
 
     # db setup
     # I'm pretty sure the backslash escapes the newline so this can multi line without 
