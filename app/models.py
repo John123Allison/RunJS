@@ -43,9 +43,9 @@ class Run(db.Model):
     def __lt__(self, other):
         return self.timestamp < other.timestamp
 
-# load user id from database for flask-login to use
-
-
 @login.user_loader
 def load_user(id):
+    """
+    load user id from database for flask-login to use
+    """
     return User.query.get(int(id))
